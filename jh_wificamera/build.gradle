@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+
+//apply plugin: 'com.github.dcendents.android-maven'
+//group='com.github.aivenlau'
+
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion 25
+    defaultConfig {
+        minSdkVersion 18
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    buildToolsVersion '27.0.3'
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compileOnly 'com.android.support:appcompat-v7:25.4.0'
+    api 'org.simple:androideventbus:1.0.5.1'
+}
+
+publish {
+    userOrg = 'aivenlau'//bintray.com用户名
+    groupId = 'com.Joyhonest'//jcenter上的路径
+    artifactId = 'Wifi_Camera'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = 'This is for JH WifiCamera'//描述，不重要
+    website = 'https://github.com/aivenlau'//网站，最好有，不重要
+}
