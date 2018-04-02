@@ -1,26 +1,7 @@
-Ver 2.3.6
+# 深圳乐信 JoyHones WifiCamera 
 
-Step 1. Add the JitPack repository to your build file
-
-Add it in your root build.gradle at the end of repositories:
-
-allprojects {
-
-		repositories {
-    
-			...
-      
-			maven { url 'https://jitpack.io' }
-      
-		}
-    
-	}
-  
-  Step 2. Add the dependency
-  
-	dependencies {
-  
-	        compile 'com.github.aivenlau:JH_Camera:2.3.6'
-          
-	}
-  
+1. 使用
+   
+   compile 'com.Joyhonest:Wifi_Camera:1.0.0'
+   
+   
