@@ -3,6 +3,7 @@
 1. 基本使用流程:   
 
     compile 'com.Joyhonest:Wifi_Camera:1.0.0'
+    
     compile 'org.simple:androideventbus:1.0.5.1'    //Wifi_Camera 使用  androideventbus 来传递消息
     
     添加一个 JH_GLSurfaceView 。这个JH_GLSurfaceView 是显示视频的view。
@@ -13,11 +14,14 @@
     此时，屏幕上可以看到视频图像
 
 2.  SDK 函数的具体说明：
-    2.1	naSetIcType:(IC_TYPE)nICType;
-     设定SDK支持的摄像头模块型号,。
+    
+    2.1	naSetIcType:(IC_TYPE)nICType;
+    
+    设定SDK支持的摄像头模块型号,。
 
     2.2 naInit(String pFileName)
-          初始化摄像头模块并开始播放。对于不同的摄像头模块具体设置，对于GKA，可以设定为 “”或者为“2”，表示传到手机未640x360，如果设定为“1”，表示传回的的视频为720P
+    
+    初始化摄像头模块并开始播放。对于不同的摄像头模块具体设置，对于GKA，可以设定为 “”或者为“2”，表示传到手机未640x360，如果设定为“1”，表示传回的的视频为720P
 
      2.3  naSetFlip(boolean b);     
 	  			设定画面是否 旋转180度
@@ -25,9 +29,12 @@
      2.4 naSet3D(boolean b);     
  				设定3D显示
  				
- 				
-     2.5  naGetFiles(int nType);     
-	 			返回模块SDK卡中的文件列表和大小 (目前只有GKA模块支持SD，其他模块此功能无效）
+ 
+ 
+    (目前只有GKA模块支持SD，对于其他模块，所有涉及SD的操作均无效）
+     2.5  naGetFiles(int nType);       
+	 			返回模块SDK卡中的文件列表和大小 
+				
 	      nType = wifination.TYPE_PHOTOS. 获取相片文件
 				 nType = wifination.TYPE_VIDEOS. 获取视频文件
 			
