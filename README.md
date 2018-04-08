@@ -1,14 +1,15 @@
 # 深圳乐信 JoyHones WifiCamera 
 
-1. 基本使用流程：
-   
-   compile 'com.Joyhonest:Wifi_Camera:1.0.0'
-   
+1. 基本使用流程:   
+
+    compile 'com.Joyhonest:Wifi_Camera:1.0.0'
+    compile 'org.simple:androideventbus:1.0.5.1'    //Wifi_Camera 使用  androideventbus 来传递消息
+    
   添加一个 JH_GLSurfaceView 。这个JH_GLSurfaceView 是显示视频的view。
   
  先依次调用
  
-	wifination.naSetIcType(wifination.IC_GKA);   //根据不同的模块，调用不同的设置参数
+	wifination.naSetIcType(wifination.IC_GPH64A);   //根据不同的模块，调用不同的设置参数
  
  wifination.naInit(“”);
 
