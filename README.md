@@ -2,8 +2,8 @@
 
 1. 基本使用流程:   
 
-    compile 'com.Joyhonest:Wifi_Camera:1.0.0'
-    compile 'org.simple:androideventbus:1.0.5.1'    //Wifi_Camera 使用  androideventbus 来传递消息
+    compile 'com.Joyhonest:Wifi_Camera:1.0.0'
+    compile 'org.simple:androideventbus:1.0.5.1'    //Wifi_Camera 使用  androideventbus 来传递消息
     
   添加一个 JH_GLSurfaceView 。这个JH_GLSurfaceView 是显示视频的view。
   
