@@ -12,15 +12,14 @@ import java.util.List;
 
 /**
  * Created by aiven on 2017/11/30.
- *
  */
 
 public class JH_Tools {
 
     //////////////
-
-    public static List<Byte> wifiData = new ArrayList<Byte>(100);
     private static List<MyCmdData> array = new ArrayList<MyCmdData>(100);
+    public static List<Byte> wifiData = new ArrayList<Byte>(100);
+
 
     private static class MyCmdData {
         private byte[] data;

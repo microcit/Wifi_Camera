@@ -2,7 +2,6 @@ package com.joyhonest.wifination;
 
 /**
  * Created by aiven on 2017/11/15.
- *
  */
 
 public class fly_cmd {
@@ -10,6 +9,7 @@ public class fly_cmd {
     public static int  Pitch=0x80;			//前后控制			0~128~255		（后小前大）
     public static int  Thro=0x80;			//油门控制			0~255			（后小前大）
     public static int  Yaw=0x80;			//转向控制			0~128~255		（左小右大）
+
     public static int  TrimRoll=0x20;		//左右微调			0~32~63		（左小右大）
     public static int  TrimPitch=0x20;		//前后微调			0~32~63		（后小前大）
     public static int  TrimThro=0x20;		//油门微调			0~32~63		（左小右大）

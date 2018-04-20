@@ -222,26 +222,20 @@ public class wifination {
 
     public static native  void naSetRevBmp(boolean b); //是否把解码到的图像发送到JAVA，有APP自己来显示而不是通过SDK内部来渲染显示
 
-    /**
-     * OpenGL ES 2.0
-     */
+    public static native  void naSetVrBackground(boolean b);
+
+    //-(void)naSetVrBackground:(BOOL)bWhite;
+
+
     public static native void init();
 
-    /**
-     *
-     */
+
     public static native void release();
 
-    /**
-     *  param width
-     *  param height
-     */
+
     public static native void changeLayout(int width, int height);
 
-    /**
-     *  paramdata
-     *
-     */
+
     public static native void drawFrame();
 
 
@@ -347,7 +341,8 @@ public class wifination {
     }
 
     // IC_GKA  获取SD卡文件列表回调函数
-    private static void GetFiles(byte[] filesname) {
+    private static void GetFiles(byte[] filesname)
+    {
         String s1 = null;
         s1 = new String(filesname);
         EventBus.getDefault().post(s1, "GetFiles");      //调用第三方库来发消息。

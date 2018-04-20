@@ -7,7 +7,6 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -24,8 +23,7 @@ public class JH_GLSurfaceView extends GLSurfaceView {
     }
 
     /**
-     * Standard View constructor. In order to render something, you
-     * must call {@link #setRenderer} to register a renderer.
+
      */
     public JH_GLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
