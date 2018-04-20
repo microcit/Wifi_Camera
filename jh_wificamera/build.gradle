@@ -42,7 +42,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly 'com.android.support:appcompat-v7:25.4.0'
-    api 'org.simple:androideventbus:1.0.5.1'
+    implementation 'org.simple:androideventbus:1.0.5.1'
 }
 
 publish {
@@ -52,4 +52,6 @@ publish {
     publishVersion = '1.0.2'//版本号
     desc = 'This is for JH WifiCamera'//描述，不重要
     website = 'https://github.com/aivenlau'//网站，最好有，不重要
+    //./gradlew clean build bintrayUpload  -PbintrayUser=aivenlau  -PbintrayKey=18013f247275f1d35b7d591240c8594d99ef7a85  -PdryRun=false
+
 }
