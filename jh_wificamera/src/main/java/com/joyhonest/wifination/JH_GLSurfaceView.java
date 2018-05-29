@@ -22,9 +22,6 @@ public class JH_GLSurfaceView extends GLSurfaceView {
         init(context_);
     }
 
-    /**
-
-     */
     public JH_GLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
