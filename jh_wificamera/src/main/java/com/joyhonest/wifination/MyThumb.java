@@ -13,9 +13,8 @@ public class MyThumb {
     public Bitmap thumb;
 
     public MyThumb(byte[] data, String sFilename_) {
-        sFilename = sFilename_;
         thumb = Bitmap.createBitmap(160, 90, Bitmap.Config.ARGB_8888);
         thumb.copyPixelsFromBuffer(ByteBuffer.wrap(data));
-
+        sFilename = sFilename_;
     }
 }

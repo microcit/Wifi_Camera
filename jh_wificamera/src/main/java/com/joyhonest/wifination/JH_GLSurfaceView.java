@@ -1,27 +1,39 @@
 package com.joyhonest.wifination;
 
 import android.content.Context;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.opengl.GLSurfaceView;
-
+import android.opengl.GLU;
+import android.opengl.GLUtils;
 import android.util.AttributeSet;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by aiven on 2017/12/29.
- *
  */
 
 public class JH_GLSurfaceView extends GLSurfaceView {
+
+
+    public  boolean  bDraw=true;
 
     public JH_GLSurfaceView(Context context_) {
         super(context_);
         init(context_);
     }
 
+    /**
+     * Standard View constructor. In order to render something, you
+     * must call {@link #setRenderer} to register a renderer.
+     */
     public JH_GLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
@@ -46,11 +58,14 @@ public class JH_GLSurfaceView extends GLSurfaceView {
             @Override
             public void onDrawFrame(GL10 gl) {
                 {
-                    wifination.drawFrame();
+                    if(bDraw)
+                        wifination.drawFrame();
                 }
             }
         });
     }
+
+
 
     public static native int naDecordInit();
 
