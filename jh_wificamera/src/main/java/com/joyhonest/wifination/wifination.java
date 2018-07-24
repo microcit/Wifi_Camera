@@ -151,6 +151,9 @@ public class wifination {
     public static native int naCancelGetThumb();
 
 
+
+
+    public static  native void naSetDislplayData(byte[]data,int width,int height);
     ///旧接口,不建议用....
     public static native int naPlay();
     public static native int naStartCheckSDStatus(boolean bStart);
