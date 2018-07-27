@@ -23,11 +23,13 @@ public class JH_GLSurfaceView extends GLSurfaceView {
         init(context_);
     }
 
-    /**
-     * Standard View constructor. In order to render something, you
-     * must call {@link #setRenderer} to register a renderer.
-     */
-    public JH_GLSurfaceView(Context context, AttributeSet attrs) {
+
+     // Standard View constructor. In order to render something, you
+     // must call {@link #setRenderer} to register a renderer.
+
+
+    public JH_GLSurfaceView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         init(context);
 
@@ -56,6 +58,12 @@ public class JH_GLSurfaceView extends GLSurfaceView {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        wifination.release();
     }
 
 
