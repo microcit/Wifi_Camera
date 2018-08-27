@@ -148,6 +148,8 @@ public class wifination {
     public static native int naCancelGetThumb();
 
 
+    public static native  void naSetDispStyle(int nType); //0-6
+
     ///旧接口,不建议用....
 
     public static  native void naSetDislplayData(byte[]data,int width,int height);
