@@ -120,9 +120,24 @@
 	5.2 GetFiles(byte[] dir)
 			当发送 4.6  4.7  命令时，每找到一个符合条件的文件，就会通过此函数
 			返回给APP
-   
-          
-5. 注意事项：
+
+
+6. 混淆
+    -keep class org.simple.** { *; }  
+
+    -keep interface org.simple.** { *; }  
+
+    -keepclassmembers class *{  
+
+            @org.simple.eventbus.Subscriber <methods>;  
+
+            }
+
+     -keepattributes *Annotation*
+
+    -keep class   com.joyhonest.wifination.**{ *; }
+
+6. 注意事项：
      APP进入后台时，最好调用naStop，再进入APP时，在 naInit。	
      对于没有SD的模块，SD卡功能的函数无作用
      所有多SD卡文件操作，请放到线程中操作，以免影响UI的操控流畅
