@@ -109,9 +109,9 @@ public class ObjectDetector
         }
     }
 
-    public  int GetNumber(Bitmap bmpA)
+    public  int GetNumber(Bitmap bmp)
     {
-        if(bmpA==null) {
+        if(bmp==null) {
             return -1;
         }
         if(!bStar)
@@ -123,24 +123,11 @@ public class ObjectDetector
         }
 
         bBusy = true;
-        final  Bitmap bmp = bmpA;
-        runInBackground(new Runnable() {
-            @Override
-            public void run() {
-                progressImage(bmp);
-            }
-        });
-        return 0;
-
-    }
-
-
-    private  void progressImage(Bitmap bmp)
-    {
-        int width = bmp.getWidth();
-        int height =bmp.getHeight();
-
-        if(frameToCropTransform ==null) {
+        //final  Bitmap bmp = bmpA;
+        if(frameToCropTransform ==null)
+        {
+            int width = bmp.getWidth();
+            int height =bmp.getHeight();
             frameToCropTransform =
                     ImageUtils.getTransformationMatrix(
                             width, height,
@@ -151,6 +138,21 @@ public class ObjectDetector
             frameToCropTransform.invert(cropToFrameTransform);
         }
         canvas.drawBitmap(bmp, frameToCropTransform, null);
+
+        runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                progressImage();
+            }
+        });
+        return 0;
+
+    }
+
+
+    private  void progressImage()
+    {
+
         //ImageUtils.saveBitmap(croppedBitmap);
         final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
         float minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
@@ -161,22 +163,18 @@ public class ObjectDetector
             final RectF location = result.getLocation();
             if (location != null && result.getConfidence() >= minimumConfidence)
             {
-                Log.e("MyTAG",result.getTitle());
+                Log.i("MyTAG",result.getTitle());
                 String id = result.getTitle();
                 bFind = true;
                 EventBus.getDefault().post(id,"GetGueset");
                 break;
             }
         }
-
         if(!bFind)
         {
-            Log.e("MyTAG","Not Found!!");
+            Log.i("MyTAG","Not Found!!");
             EventBus.getDefault().post("","GetGueset");
         }
-
-
-
         bBusy = false;
     }
 
