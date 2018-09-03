@@ -2,7 +2,7 @@
 
 1. 基本使用流程:   
 
-    compile 'com.Joyhonest:Wifi_Camera:1.6.6'
+    compile 'com.Joyhonest:Wifi_Camera:1.6.8'
     
     compile 'org.simple:androideventbus:1.0.5.1'    //Wifi_Camera 使用  androideventbus 来传递消息
     

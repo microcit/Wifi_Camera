@@ -120,12 +120,42 @@ public class wifination {
 
     //手机是否在录像
     public static native boolean isPhoneRecording();
-    //设定录像的分辨率，一般无需设定，默认位模块传回视频分辨率
+   //设定录像的分辨率，一般无需设定，默认位模块传回视频分辨率
     public static native int naSetRecordWH(int ww, int hh);
 
     //设定是否需要SDK内部来显示，b = true， SDK 把解码到的图像发送到JAVA，由APP自己来显示而不是通过SDK内部来渲染显示
+
     // SDK解码后图像 由 ReceiveBmp 返回
-    public static native void naSetRevBmp(boolean b);
+
+    public static void naSetRevBmp(boolean b)
+    {
+        bRevBmp = b;
+        naSetRevBmpA(b);
+    }
+    public static void naSetGesture(boolean b,Context appContext)
+    {
+        bGesture = b;
+        if(bGesture)
+        {
+            if(sig==null)
+            {
+                sig = ObjectDetector.getInstance();
+                sig.SetAppCentext(appContext);
+            }
+        }
+        if(sig!=null)
+        {
+            sig.F_Start(bGesture);
+        }
+        naSetGestureA(b);
+    }
+
+
+    private static native void naSetRevBmpA(boolean b);
+
+    //设定是否手势识别， True，每一帧也会由 ReceiveBmp 返回，不同的是 SDK内部还是会显示视频。 如果APP 自己来实现手势识别和显示，
+    // 可以用 naSetRevBmp 来替代
+    private static native void naSetGestureA(boolean b);
 
 
     //设定 客户 只针对 GKA， “sima” 表示 客户是司马 ，目前只有这一个设定
@@ -225,6 +255,12 @@ public class wifination {
 
     public static native void drawFrame();
 
+
+    public  static boolean  bGesture = false;
+    public  static boolean  bRevBmp = false;
+
+
+    private static ObjectDetector sig=null;
 
     private static void G_StartAudio(int b) {
         if (b != 0) {
@@ -354,7 +390,7 @@ public class wifination {
                 cmd[i] = buf.get(i + BMP_Len);
             }
             EventBus.getDefault().post(cmd, "GetWifiSendData");
-        } else if ((nStatus & 0xFFFFFF00) == 0xAA55AA00)    //GP RTPB  回传 模块信息数据
+        } else if ((nStatus & 0xFFFFFF00) == 0xAA55AA00)    //GP RTPB  回传 模块本身信息数据
         {
             int nLen = (nStatus & 0xFF);
             if (nLen > 50)
@@ -420,10 +456,10 @@ public class wifination {
     /////// 以下 SYMA 不使用 --------
     private static void OnKeyPress(int nStatus) {
         Integer n = nStatus;
-        Log.e(TAG, "Get Key = " + nStatus);
         EventBus.getDefault().post(n, "key_Press");
         EventBus.getDefault().post(n, "Key_Pressed");
     }
+
 
 
     // 获取一帧图像
@@ -432,12 +468,19 @@ public class wifination {
         //      i:bit16-bit31  为图像高度
         // 此函数需要把数据尽快处理和保存。
         // 图像数据保存在mDirectBuffer中，格式为ARGB_8888
+
         Bitmap bmp = Bitmap.createBitmap(i & 0xFFFF, (i & 0xFFFF0000) >> 16, Bitmap.Config.ARGB_8888);
         ByteBuffer buf = wifination.mDirectBuffer;
         buf.rewind();
         bmp.copyPixelsFromBuffer(buf);    //
-        //Integer iw=i;
-        EventBus.getDefault().post(bmp, "ReviceBMP");
+        if(bRevBmp)
+            EventBus.getDefault().post(bmp, "ReviceBMP");
+        if(bGesture)
+        {
+                if(sig!=null)
+                    sig.GetNumber(bmp);
+        }
+
     }
 
 
