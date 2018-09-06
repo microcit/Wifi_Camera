@@ -120,7 +120,7 @@ public class wifination {
 
     //手机是否在录像
     public static native boolean isPhoneRecording();
-   //设定录像的分辨率，一般无需设定，默认位模块传回视频分辨率
+    //设定录像的分辨率，一般无需设定，默认位模块传回视频分辨率
     public static native int naSetRecordWH(int ww, int hh);
 
     //设定是否需要SDK内部来显示，b = true， SDK 把解码到的图像发送到JAVA，由APP自己来显示而不是通过SDK内部来渲染显示
@@ -377,7 +377,6 @@ public class wifination {
     private static void OnGetGP_Status(int nStatus) {
         if ((nStatus & 0xFFFFFF00) == 0x55AA5500)  // wifi模块透传回来的数据
         {
-            //String s = "";
             int nLen = (nStatus & 0xFF);
             if (nLen > 50)
                 nLen = 50;
@@ -390,7 +389,8 @@ public class wifination {
                 cmd[i] = buf.get(i + BMP_Len);
             }
             EventBus.getDefault().post(cmd, "GetWifiSendData");
-        } else if ((nStatus & 0xFFFFFF00) == 0xAA55AA00)    //GP RTPB  回传 模块本身信息数据
+        }
+        else if ((nStatus & 0xFFFFFF00) == 0xAA55AA00)    //GP RTPB  回传 模块本身信息数据
         {
             int nLen = (nStatus & 0xFF);
             if (nLen > 50)
@@ -402,7 +402,14 @@ public class wifination {
                 cmd[i] = buf.get(i + BMP_Len);
             }
             EventBus.getDefault().post(cmd, "GetWifiInfoData");
-        } else {
+        }
+        else if ((nStatus & 0xFFFFFF00) == 0xAA555500)    //GP 回传电量
+        {
+            int nBattery = nStatus &0x0F;
+            Integer nB = nBattery;
+            EventBus.getDefault().post(nB, "OnGetBatteryLevel");
+        }
+        else {
             Integer ix = nStatus;                //返回 模块按键
             Log.e(TAG, "Get data = " + nStatus);
             EventBus.getDefault().post(ix, "OnGetGP_Status");
@@ -477,8 +484,8 @@ public class wifination {
             EventBus.getDefault().post(bmp, "ReviceBMP");
         if(bGesture)
         {
-                if(sig!=null)
-                    sig.GetNumber(bmp);
+            if(sig!=null)
+                sig.GetNumber(bmp);
         }
 
     }

@@ -8,14 +8,12 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
-import android.widget.Toast;
 
 //import com.joyhonest.jh_ui.JH_App;
 
 import org.simple.eventbus.EventBus;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ObjectDetector
@@ -31,8 +29,7 @@ public class ObjectDetector
 
     private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.66f;
     private static final int TF_OD_API_INPUT_SIZE = 300;
-    //private static final String TF_OD_API_MODEL_FILE = "file:///android_asset/ssd_mobilenet_v1_android_export.pb";
-    //private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/coco_labels_list.txt";
+
     private static final String TF_OD_API_MODEL_FILE ="file:///android_asset/frozen_inference_graph.pb";
     private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/mydata.txt";
 
@@ -64,7 +61,7 @@ public class ObjectDetector
             if(detector==null)
             {
                 try {
-                    detector = TensorFlowObjectDetectionAPIModel.create(
+                    detector = JH_ObjectDetectionAPIModel.create(
                             AppContext.getAssets(), TF_OD_API_MODEL_FILE, TF_OD_API_LABELS_FILE, TF_OD_API_INPUT_SIZE);
                     cropSize = TF_OD_API_INPUT_SIZE;
                 } catch (final IOException e) {
