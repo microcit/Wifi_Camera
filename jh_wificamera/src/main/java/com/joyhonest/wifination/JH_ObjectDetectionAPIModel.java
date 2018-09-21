@@ -18,6 +18,7 @@ package com.joyhonest.wifination;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -204,6 +205,7 @@ public class JH_ObjectDetectionAPIModel implements Classifier {
     for (int i = 0; i < Math.min(pq.size(), MAX_RESULTS); ++i) {
       recognitions.add(pq.poll());
     }
+
     return recognitions;
   }
 

@@ -4,6 +4,7 @@ package com.joyhonest.wifination;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.Log;
 
@@ -240,6 +241,8 @@ public class wifination {
 
     public static native boolean naSetWifiPassword(String sPassword);
 
+    public static native void naSetLedOnOff(boolean bOpenLed);
+
 
     public static native void naSetScal(float fScal); //设定放大显示倍数
 
@@ -322,15 +325,41 @@ public class wifination {
         if (bmp == null)
             return;
 
-        int ww = bmp.getWidth();
-        int hh = bmp.getHeight();
-        if (ww > 1280 || hh > 720) {
+        //int ww = bmp.getWidth();
+        //int hh = bmp.getHeight();
+        //if (ww > 1280 || hh > 720)
+        {
+
+            int width = bmp.getWidth();
+            int height =bmp.getHeight();
+            int newWidth = ((width+7)/8)*8;
+            int newHeight = ((height+7)/8)*8;
+
+            Bitmap croppedBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(croppedBitmap);
+            Matrix frameToCropTransform;
+
+
+
+            frameToCropTransform =
+                    ImageUtils.getTransformationMatrix(
+                            width, height,
+                            newWidth, newHeight,
+                            0, false);
+
+            Matrix cropToFrameTransform = new Matrix();
+            frameToCropTransform.invert(cropToFrameTransform);
+            canvas.drawBitmap(bmp, frameToCropTransform, null);
+
+                /*
             //获得图片的宽高
             int width = bmp.getWidth();
             int height = bmp.getHeight();
             // 设置想要的大小
-            int newWidth = 1280;
-            int newHeight = 720;
+            int newWidth = ((width+7)/8)*8;
+            int newHeight = ((height+7)/8)*8;
+
+
             // 计算缩放比例
             float scaleWidth = ((float) newWidth) / width;
             float scaleHeight = ((float) newHeight) / height;
@@ -342,9 +371,13 @@ public class wifination {
                     true);
             bmp.recycle();
             bmp = newbm;
+            */
+            bmp.recycle();
+            bmp = croppedBitmap;
         }
-        ww = bmp.getWidth();
-        hh = bmp.getHeight();
+
+        int ww = bmp.getWidth();
+        int hh = bmp.getHeight();
         int bytes = bmp.getByteCount();
         ByteBuffer buf = ByteBuffer.allocate(bytes);
         bmp.copyPixelsToBuffer(buf);
@@ -409,6 +442,13 @@ public class wifination {
             Integer nB = nBattery;
             EventBus.getDefault().post(nB, "OnGetBatteryLevel");
         }
+        else if ((nStatus & 0xFFFFFF00) == 0x11223300)    //回传电量显示nStyle
+        {
+            int nStyle = nStatus &0x0F;
+            Integer nB = nStyle;
+            EventBus.getDefault().post(nB, "OnGetSetStyle");
+        }
+
         else {
             Integer ix = nStatus;                //返回 模块按键
             Log.e(TAG, "Get data = " + nStatus);

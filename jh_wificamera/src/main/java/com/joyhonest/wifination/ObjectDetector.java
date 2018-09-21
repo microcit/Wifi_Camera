@@ -24,10 +24,9 @@ public class ObjectDetector
     private   static  int   cropSize = 300;
     private  boolean  bBusy = false;
     private  boolean   bStar=false;
-
     private Classifier detector;
 
-    private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.66f;
+    private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.80f;
     private static final int TF_OD_API_INPUT_SIZE = 300;
 
     private static final String TF_OD_API_MODEL_FILE ="file:///android_asset/frozen_inference_graph.pb";
