@@ -21,9 +21,9 @@ import android.os.Environment;
 import java.io.File;
 import java.io.FileOutputStream;
 
-/**
+/*
  * Utility class for manipulating images.
- **/
+ */
 public class ImageUtils {
   @SuppressWarnings("unused")
   private static final Logger LOGGER = new Logger();
@@ -36,7 +36,7 @@ public class ImageUtils {
     }
   }
 
-  /**
+  /*
    * Utility method to compute the allocated size in bytes of a YUV420SP image
    * of the given dimensions.
    */
@@ -51,7 +51,7 @@ public class ImageUtils {
     return ySize + uvSize;
   }
 
-  /**
+  /*
    * Saves a Bitmap object to disk for analysis.
    *
    * @param bitmap The bitmap to save.
@@ -60,7 +60,7 @@ public class ImageUtils {
     saveBitmap(bitmap, "preview.png");
   }
 
-  /**
+  /*
    * Saves a Bitmap object to disk for analysis.
    *
    * @param bitmap The bitmap to save.

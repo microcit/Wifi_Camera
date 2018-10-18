@@ -1,11 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
+//apply plugin: "guru.stefma.bintrayrelease"
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,7 +28,7 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-    buildToolsVersion '27.0.3'
+
 
     android {
         lintOptions {
@@ -37,18 +39,35 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.android.support:appcompat-v7:25.4.0'
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
     implementation 'org.simple:androideventbus:1.0.5.1'
     implementation 'org.tensorflow:tensorflow-android:1.10.0'
 }
+
+
 
 publish {
     userOrg = 'aivenlau'//bintray.com用户名
     groupId = 'com.Joyhonest'//jcenter上的路径
     artifactId = 'Wifi_Camera'//项目名称
-    publishVersion = '1.8.3'//版本号
+    publishVersion = '1.9.6'//版本号
     desc = 'This is for JH WifiCamera'//描述，不重要
     website = 'https://github.com/aivenlau/Wifi_Camera'//网站，最好有，不重要
     // ./gradlew clean build bintrayUpload  -PbintrayUser=aivenlau  -PbintrayKey=18013f247275f1d35b7d591240c8594d99ef7a85  -PdryRun=false
 
 }
+
+
+/*
+version = "1.9.7"
+group = "com.Joyhonest"
+androidArtifact { // 2
+    artifactId = "Wifi_Camera"
+}
+publish {
+    userOrg = 'aivenlau'
+    desc = 'This is for JH WifiCamera'
+    website = 'https://github.com/aivenlau/Wifi_Camera'
+   //    ./gradlew clean build bintrayUpload  -PbintrayUser=aivenlau  -PbintrayKey=18013f247275f1d35b7d591240c8594d99ef7a85 -PdryRun=false
+}
+*/

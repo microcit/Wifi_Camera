@@ -23,7 +23,7 @@ public class JH_GLSurfaceView extends GLSurfaceView {
         init(context_);
     }
 
-    /**
+    /*
      * Standard View constructor. In order to render something, you
      * must call {@link #setRenderer} to register a renderer.
      */
