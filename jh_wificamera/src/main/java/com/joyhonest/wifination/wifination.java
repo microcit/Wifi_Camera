@@ -246,7 +246,7 @@ public class wifination {
 
     public static native void naRotation(int n);  // n == 0 || n ==90 || n ==-90 || n ==180 || n==270
     public static  native void naSetbRotaHV(boolean b); //b = flase  表示手机是竖屏显示，但因为我们的camera是横屏数据，所以还需调用 naRotation 来转 90度满屏显示
-                                                        //b = true,  手机横屏显示，此时如果调用 naRotation， 就只是把 显示画面旋转 ，如果转 90 ，-90 270 ，就会显示有 黑边
+    //b = true,  手机横屏显示，此时如果调用 naRotation， 就只是把 显示画面旋转 ，如果转 90 ，-90 270 ，就会显示有 黑边
     public static native boolean naSetWifiPassword(String sPassword);
 
     public static native void naSetLedOnOff(boolean bOpenLed);
@@ -369,15 +369,15 @@ public class wifination {
 
 
 
-                frameToCropTransform =
-                        ImageUtils.getTransformationMatrix(
-                                width, height,
-                                newWidth, newHeight,
-                                0, false);
+            frameToCropTransform =
+                    ImageUtils.getTransformationMatrix(
+                            width, height,
+                            newWidth, newHeight,
+                            0, false);
 
-                Matrix cropToFrameTransform = new Matrix();
-                frameToCropTransform.invert(cropToFrameTransform);
-                canvas.drawBitmap(bmp, frameToCropTransform, null);
+            Matrix cropToFrameTransform = new Matrix();
+            frameToCropTransform.invert(cropToFrameTransform);
+            canvas.drawBitmap(bmp, frameToCropTransform, null);
 
                 /*
             //获得图片的宽高
@@ -400,8 +400,8 @@ public class wifination {
             bmp.recycle();
             bmp = newbm;
             */
-                bmp.recycle();
-                bmp = croppedBitmap;
+            bmp.recycle();
+            bmp = croppedBitmap;
         }
 
         int ww = bmp.getWidth();
@@ -604,10 +604,18 @@ public class wifination {
 
     private  static  void offerEncoder(byte[] data,int nLen)
     {
-         if(videoMediaCoder!=null)
-         {
-             videoMediaCoder.offerEncoder(data,nLen);
-         }
+        if(videoMediaCoder!=null)
+        {
+            videoMediaCoder.offerEncoder(data,nLen);
+        }
+    }
+
+    private  static void F_CloseEncoder()
+    {
+        if(videoMediaCoder!=null)
+        {
+            videoMediaCoder.F_CloseEncoder();
+        }
     }
 
 

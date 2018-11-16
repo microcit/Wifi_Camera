@@ -102,11 +102,21 @@ public class VideoMediaCoder {
         return nColor;
 
     }
+    public void F_CloseEncoder()
+    {
+        if(mMediaCodec==null)
+        {
+            return;
+        }
+        mMediaCodec.stop();
+        mMediaCodec.release();
+        mMediaCodec=null;
+    }
     public  void  offerEncoder(byte[] data,int nLen)
     {
         if(mMediaCodec==null)
         {
-             return;
+            return;
         }
         ByteBuffer[] inputBuffers = mMediaCodec.getInputBuffers();//拿到输入缓冲区,用于传送数据进行编码
         ByteBuffer[] outputBuffers = mMediaCodec.getOutputBuffers();//拿到输出缓冲区,用于取到编码后的数据
