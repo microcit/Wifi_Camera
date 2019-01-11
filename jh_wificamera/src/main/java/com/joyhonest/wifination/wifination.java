@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 
 import org.simple.eventbus.EventBus;
@@ -267,6 +266,9 @@ public class wifination {
     public static native void naSetDebug(boolean b);//串口数据 ，用于与固件调试
 
     public static native void naWriteport20000(byte[] cmd,int nleng);
+
+    public static native  void naSetMirror(boolean b);
+
 
 
     public static native void init();
