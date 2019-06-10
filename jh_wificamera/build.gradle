@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
-//apply plugin: "guru.stefma.bintrayrelease"
 
 android {
     compileSdkVersion 28
@@ -12,7 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters 'armeabi-v7a'
+            abiFilters 'armeabi-v7a','arm64-v8a'
         }
     }
 
@@ -41,7 +40,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly 'com.android.support:appcompat-v7:28.0.0'
     implementation 'org.simple:androideventbus:1.0.5.1'
-    implementation 'org.tensorflow:tensorflow-android:1.10.0'
+    compileOnly 'org.tensorflow:tensorflow-android:1.13.1'
 }
 
 
@@ -50,10 +49,34 @@ publish {
     userOrg = 'aivenlau'//bintray.com用户名
     groupId = 'com.Joyhonest'//jcenter上的路径
     artifactId = 'Wifi_Camera'//项目名称
-    publishVersion = '2.1.2'//版本号
+    publishVersion = '3.3.3'//版本号 3.0.0 后支持 arm64
     desc = 'This is for JH WifiCamera'//描述，不重要
     website = 'https://github.com/aivenlau/Wifi_Camera'//网站，最好有，不重要
+
     // ./gradlew clean build bintrayUpload  -PbintrayUser=aivenlau  -PbintrayKey=18013f247275f1d35b7d591240c8594d99ef7a85  -PdryRun=false
+
+
+    /*
+    3.3.3  2019-06-4      添加支持RTL  是普普通模块还是 PIR模块
+    3.3.2    2019-06-4    修改bugs
+    3.3.1    2019-06-3    修改bugs
+    3.3.0    2019-05-29   修改.so文件中缩放中截图改为调用 libyuv 库，以提高效率
+    3.2.9    2019-05-25   微调手势识别代码
+    3.2.8    2019-05-24   增加读取密码信息
+    3.2.7    2019-05-24   增加设定手势识别灵敏度膜
+    3.2.6    2019-05-17   增加设定和读取摄像头补光灯PWM
+    3.2.3    2019-05-14   修复bug
+    3.2.2    2019-05-14   修复bug
+     3.2.1    2019-05-13  加入对RTL 模块 浏览下载 SD文件
+     3.2.0    2019-04-28  修复在MTK CPU 上的某些机型录像时录像文件花屏。
+     3.1.9     2019-04-25  修复在某些机型上显示花屏。
+     3.1.8     2019-04-23
+         修复读写flash接口
+     3.1.6    2019-04-18
+        增加读写设备flash接口
+     3.0.0
+         加入支持arm64
+    */
 
 }
 
