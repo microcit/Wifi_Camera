@@ -9,6 +9,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+
 public class VideoMediaCoder {
     long pts;
     int fps;
@@ -161,7 +162,7 @@ public class VideoMediaCoder {
 
         if(mMediaCodec==null)
         {
-            return;
+             return;
         }
         //Log.e("abc","sent 0");
         ByteBuffer[] inputBuffers = mMediaCodec.getInputBuffers();//拿到输入缓冲区,用于传送数据进行编码

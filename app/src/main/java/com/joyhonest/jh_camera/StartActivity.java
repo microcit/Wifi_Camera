@@ -4,8 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-
 import com.joyhonest.wifination.wifination;
+
+
+//import com.joyhonest.wifination.wifination;
 
 //import org.simple.eventbus.EventBus;
 

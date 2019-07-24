@@ -153,6 +153,10 @@ public class wifination {
     //设定录像的分辨率，一般无需设定，默认位模块传回视频分辨率
     public static native int naSetRecordWH(int ww, int hh);
 
+
+    public static native  int naGetDispWH();
+
+
     //设定是否需要SDK内部来显示，b = true， SDK 把解码到的图像发送到JAVA，由APP自己来显示而不是通过SDK内部来渲染显示
 
     // SDK解码后图像 由 ReceiveBmp 返回
@@ -332,6 +336,8 @@ public class wifination {
 
     private static ObjectDetector sig=null;
 
+
+    public  static native int naSetTransferSize(int nWidth,int nHeight);   //宽度必须是8的倍数
 
 
     public static void naSetGesture_vol(float aa)
@@ -624,6 +630,16 @@ public class wifination {
             case 0xFFFC:            //按键  -- 这是为了兼容之前的SDK，新版的SDK通过  OnKeyPress  返回
                 Integer ix = nStatus &0xFF;                //返回 模块按键
                 EventBus.getDefault().post(ix, "OnGetGP_Status");
+                break;
+
+            case 0xFBFB:         //所有其他通过UDP返回的数据
+                int nLen = (nStatus & 0xFFFF);
+                byte[] cmd = new byte[nLen];
+                ByteBuffer buf = wifination.mDirectBuffer;
+                for (int i = 0; i < nLen; i++) {
+                    cmd[i] = buf.get(i + BMP_Len);
+                }
+                EventBus.getDefault().post(cmd, "GetDataFromWifi");
                 break;
 
         }

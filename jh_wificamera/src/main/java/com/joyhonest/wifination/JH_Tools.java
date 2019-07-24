@@ -1,14 +1,14 @@
 package com.joyhonest.wifination;
 
 
-
-
-
+import android.util.Log;
 
 import org.simple.eventbus.EventBus;
 
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by aiven on 2017/11/30.
@@ -19,25 +19,33 @@ public class JH_Tools {
     //////////////
     private static int nCmdResType = 0;
 
-    private static List<Byte> wifiData = new ArrayList<Byte>(100);
+    public static List<Byte> wifiData = new ArrayList<Byte>(100);
     private static List<MyCmdData> array = new ArrayList<MyCmdData>(100);
+
+
+    public static void F_SetCmdResType(int n) {
+
+    }
 
     private static class MyCmdData {
         private byte[] data = null;
         private int udpInx;
+        //private int  nCmdResType = 0;
 
-        private MyCmdData(int idx, byte[] dat) {
+
+        public MyCmdData() {
+            udpInx = -1;
+        }
+
+        public MyCmdData(int idx, byte[] dat) {
 
             data = null;
             if (dat != null) {
                 if (dat.length > 4) {
                     data = new byte[dat.length - 4];
-                    System.arraycopy(dat, 4, data, 0, dat.length-4);
-                    /*
                     for (int ix = 0; ix < dat.length - 4; ix++) {
                         data[ix] = dat[ix + 4];
                     }
-                    */
                 }
             }
             udpInx = idx;
@@ -88,16 +96,16 @@ public class JH_Tools {
             }
             while (wifiData.size() >= 8) {
 
-                if (wifiData.get(0) == (byte) 0x66 && wifiData.get(7) == (byte) 0x99) {
+                if (wifiData.get(0).byteValue() == (byte) 0x66 && wifiData.get(7).byteValue() == (byte) 0x99) {
                     byte nChecksum = 0;
                     for (ix = 1; ix < 6; ix++) {
-                        nChecksum = (byte) (nChecksum ^ wifiData.get(ix));
+                        nChecksum = (byte) (nChecksum ^ wifiData.get(ix).byteValue());
                     }
-                    if (nChecksum == wifiData.get(6)) {
+                    if (nChecksum == wifiData.get(6).byteValue()) {
                         bOK = true;
                         byte[] revData = new byte[8];
                         for (ix = 0; ix < 8; ix++) {
-                            revData[ix] = wifiData.get(ix);
+                            revData[ix] = wifiData.get(ix).byteValue();
                         }
                         EventBus.getDefault().post(revData, "GetWifiSendData");
                         for (ix = 0; ix < 8; ix++) {
@@ -132,12 +140,9 @@ public class JH_Tools {
                     nStart = i;
                     if (nCount >= 8) {
                         byte[] dat = new byte[nCount];
-                        System.arraycopy(d1.data,0,dat,0,d1.data.length);
-                        /*
                         for (int yy = 0; yy < d1.data.length; yy++) {
                             dat[yy] = d1.data[yy];
                         }
-                        */
                         Process(dat);
                         {
                             for (ix = i; ix >= 0; ix--) {
@@ -151,18 +156,14 @@ public class JH_Tools {
                     if (idx - nPre == 1) {
                         nCount += d1.data.length;
                         if (nCount >= 8) {
-                            //int le = 0;
+                            int le = 0;
                             byte[] dat = new byte[nCount];
-                            for (int xx = nStart; xx <= i; xx++)
-                            {
+                            for (int xx = nStart; xx <= i; xx++) {
                                 MyCmdData d2 = array.get(xx);
-                                System.arraycopy(d2.data,0,dat,0,d2.data.length);
-                                /*
                                 for (int yy = 0; yy < d2.data.length; yy++) {
-                                    //dat[le] = d2.data[yy];
-                                    //le++;
+                                    dat[le] = d2.data[yy];
+                                    le++;
                                 }
-                                */
                             }
                             Process(dat);
                             {
@@ -265,9 +266,14 @@ public class JH_Tools {
     }
 
     private static void F_ProgressResType1() {
-        int dx;
+
+
+        int dx = 0;
+
         if (array.size() <= 0)
             return;
+
+
         MyCmdData d1 = array.get(0);
         int len1 = d1.data.length;
         int ret = ProgressA(d1.data, d1.data.length);
@@ -290,7 +296,7 @@ public class JH_Tools {
 
                 }
             }
-        } else {
+        } else if (ret > 0) {
             dx = len1 - ret;
             if (dx > 0) {
                 byte[] tmpdata = new byte[dx];
@@ -301,6 +307,98 @@ public class JH_Tools {
                 array.remove(0);
             }
         }
+
+
+/*
+
+        for (i = 0; i < array.size(); i++)
+        {
+            MyCmdData d1 = array.get(i);
+            int nLen1= d1.data.length;
+            if(i==0)
+            {
+                nPre = d1.udpInx;
+                if(nLen1<=2048)
+                {
+                    for(int xx=0;xx<nLen1;xx++)
+                    {
+                        dat[xx] = d1.data[xx];
+                        datINX[xx] = i;
+                    }
+                    nDatCount=nLen1;
+                    nProsed = ProgressA(dat,nDatCount);
+                    if(nProsed>0)
+                    {
+                        dx = nLen1-nProsed;
+                        if(dx<=0)
+                        {
+                            array.remove(0);
+                        }
+                        else {
+                             byte[] dba = new byte[dx];
+                             for(int xx = 0;xx<dx;xx++)
+                             {
+                                 dba[xx] = d1.data[xx+nProsed];
+                             }
+
+                             d1.data = new byte[dx];
+                             for(int xx = 0;xx<dx;xx++)
+                             {
+                                d1.data[xx]=dba[xx];
+                             }
+                        }
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                idx = d1.udpInx;
+                if(idx-nPre==1)
+                {
+                    if(nLen1+nDatCount<=2048)
+                    {
+                        for(int xx=0;xx<nLen1;xx++)
+                        {
+                            dat[xx+nDatCount] = d1.data[xx];
+                            datINX[xx] = i;
+                        }
+                        nDatCount+=nLen1;
+                        nProsed = ProgressA(dat,nDatCount);
+                        if(nProsed>0)
+                        {
+                            dx = nLen1-nProsed;
+                            if(dx<=0)
+                            {
+                                array.remove(0);
+                            }
+                            else {
+                                byte[] dba = new byte[dx];
+                                for(int xx = 0;xx<dx;xx++)
+                                {
+                                    dba[xx] = d1.data[xx+nProsed];
+                                }
+
+                                d1.data = new byte[dx];
+                                for(int xx = 0;xx<dx;xx++)
+                                {
+                                    d1.data[xx]=dba[xx];
+                                }
+                            }
+                            break;
+                        }
+
+                    }
+                }
+                else
+                {
+                    break;
+                }
+                nPre= d1.udpInx;
+            }
+        }
+        */
+
 
     }
 
