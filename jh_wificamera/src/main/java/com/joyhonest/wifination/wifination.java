@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 
 import org.simple.eventbus.EventBus;
@@ -24,6 +23,8 @@ import java.nio.ByteBuffer;
 public class wifination {
 
 
+
+
     private  final  static int CmdLen = 1024;
 
     public final static int IC_NO = -1;
@@ -37,6 +38,7 @@ public class wifination {
     public final static int IC_GPH264A = 7;
     public final static int IC_GPRTPB = 8;
     public final static int IC_GK_UDP = 9;
+
 
 
     public static AudioEncoder AudioEncoder;
@@ -57,8 +59,11 @@ public class wifination {
 
     private final static String TAG = "wifination";
     private static final wifination m_Instance = new wifination();
-    private static final int BMP_Len = (((1920 + 3) / 4) * 4) * 4 * 1080 + 1024;
+    private static final int BMP_Len = (((2560 + 3) / 4) * 4) * 4 * 1920 + 2048;
 
+
+
+    public static GP4225_Device gp4225_Device;
 
 
     public static Context appContext = null;
@@ -68,6 +73,8 @@ public class wifination {
             System.loadLibrary("jh_wifi");
             AudioEncoder = new AudioEncoder();
             videoMediaCoder = new VideoMediaCoder();
+
+            gp4225_Device = new GP4225_Device();
 
             mDirectBuffer = ByteBuffer.allocateDirect(BMP_Len + CmdLen);     //获取每帧数据，主要根据实际情况，分配足够的空间。
             naSetDirectBuffer(mDirectBuffer, BMP_Len + CmdLen);
@@ -186,6 +193,49 @@ public class wifination {
 
 
 
+    /*
+            4225 凌通 支持SD卡录像+
+    */
+
+    /*
+        APP读取状态信息
+    */
+    public static native void na4225_ReadStatus();
+
+    /*
+            APP设定工作模式
+            0  实时图像
+            1  文件操作
+     */
+
+    public static native void na4225_SetMode(byte nMode);
+
+    /*
+        APP 查询文件列表
+        先调用na4225_SetMode，进入文件列表模式
+        nType = 1;  视频
+        nType = 2;  锁定视频
+        nType = 3'  相片
+        nType = 4'  锁定相片
+ */
+
+    public static native void na4225_GetFileList(int nType, int nStrtinx,int nEndinx);
+
+
+
+    public static native void na4225_DeleteFile(String sPath,String sFileName);
+    public static native void na4225_DeleteAll(int nType); //  2 videos 3 photos   4 all
+
+
+    /*
+        文件下载
+    */
+
+    public static native boolean na4225StartDonwLoad(String sPath,String sFileName,int nLen,String sSaveName);
+    public static native boolean  na4225StartPlay(String sPath,String sFileName,int nLen);
+    public static native boolean naDisConnectedTCP();
+    ///////// 4225 end --------------
+
 
 
     private static native void naSetRevBmpA(boolean b);
@@ -280,11 +330,16 @@ public class wifination {
 
 
 
+
+    public static native  void naSetCameraDataRota(int n);
+
+
+
     public static native void naSetVrBackground(boolean b);
 
     public static native void naRotation(int n);  // n == 0 || n ==90 || n ==-90 || n ==180 || n==270
     public static  native void naSetbRotaHV(boolean b); //b = flase  表示手机是竖屏显示，但因为我们的camera是横屏数据，所以还需调用 naRotation 来转 90度满屏显示
-    //b = true,  手机横屏显示，此时如果调用 naRotation， 就只是把 显示画面旋转 ，如果转 90 ，-90 270 ，就会显示有 黑边
+                                                        //b = true,  手机横屏显示，此时如果调用 naRotation， 就只是把 显示画面旋转 ，如果转 90 ，-90 270 ，就会显示有 黑边
     public static native boolean naSetWifiPassword(String sPassword);
 
     public static native void naSetLedOnOff(boolean bOpenLed);
@@ -345,14 +400,17 @@ public class wifination {
         ObjectDetector.MINIMUM_CONFIDENCE_TF_OD_API = aa;
     }
 
-///////JoyTrip
 
     public static native boolean naSentUdpData(String sIP, int nPort,byte[] data, int nLen);
     public static native boolean naStartReadUdp(int nPort); // 收到数据后，会通过onUdpRevData 返回
     public static native boolean naStopReadUdp();
     private static  void onUdpRevData(byte[] data)
     {
-        EventBus.getDefault().post(data,"onUdpRevData");
+
+
+         if(!gp4225_Device.GP4225_PressData(data)) {
+             EventBus.getDefault().post(data, "onUdpRevData");
+         }
     }
 
 
@@ -440,15 +498,15 @@ public class wifination {
 
 
 
-            frameToCropTransform =
-                    ImageUtils.getTransformationMatrix(
-                            width, height,
-                            newWidth, newHeight,
-                            0, false);
+                frameToCropTransform =
+                        ImageUtils.getTransformationMatrix(
+                                width, height,
+                                newWidth, newHeight,
+                                0, false);
 
-            Matrix cropToFrameTransform = new Matrix();
-            frameToCropTransform.invert(cropToFrameTransform);
-            canvas.drawBitmap(bmp, frameToCropTransform, null);
+                Matrix cropToFrameTransform = new Matrix();
+                frameToCropTransform.invert(cropToFrameTransform);
+                canvas.drawBitmap(bmp, frameToCropTransform, null);
 
                 /*
             //获得图片的宽高
@@ -471,8 +529,8 @@ public class wifination {
             bmp.recycle();
             bmp = newbm;
             */
-            bmp.recycle();
-            bmp = croppedBitmap;
+                bmp.recycle();
+                bmp = croppedBitmap;
         }
 
         int ww = bmp.getWidth();
@@ -537,7 +595,7 @@ public class wifination {
                 Integer ix = (nStatus & 0xFF);
                 EventBus.getDefault().post(ix, "OnGetPwmData");
             }
-            break;
+                break;
             case   0x3005:    //读取flash数据
             {
                 int nLen = (nStatus & 0xFFFF);
@@ -552,7 +610,7 @@ public class wifination {
                 }
                 EventBus.getDefault().post(cmd, "ReadDataFromFlash");
             }
-            break;
+                break;
             case   0x3006:      //写数据结果
             {
                 int re  = 1;
@@ -568,7 +626,7 @@ public class wifination {
                 Integer ii = re;
                 EventBus.getDefault().post(ii, "WriteData2FlashResult");
             }
-            break;
+                break;
             case 0xFFFF:                    //所有通过串口传过来的数据 ，用于与固件调试时使用
             {
                 int nLen = (nStatus & 0xFFFF);
@@ -584,7 +642,7 @@ public class wifination {
                 }
                 EventBus.getDefault().post(cmd, "GetDataFromRs232");
             }
-            break;
+                break;
             case 0x5443:            //wifi透传数据
             {
                 int nLen = (nStatus & 0xFF);
@@ -598,7 +656,7 @@ public class wifination {
                 }
                 EventBus.getDefault().post(cmd, "GetWifiSendData");
             }
-            break;
+                break;
             case  0x2000://              回传 模块本身信息数据
             {
                 int nLen = (nStatus & 0xFF);
@@ -610,7 +668,7 @@ public class wifination {
                 }
                 EventBus.getDefault().post(cmd, "GetWifiInfoData");
             }
-            break;
+                break;
 
             case 0x1021:
             case 0xFFFE:            //电量
@@ -618,14 +676,14 @@ public class wifination {
                 Integer nB = nStatus &0x0F;;
                 EventBus.getDefault().post(nB, "OnGetBatteryLevel");
             }
-            break;
+                break;
 
             case  0x0006:       //返回显示Style
             {
                 Integer nB = nStatus &0x0F;
                 EventBus.getDefault().post(nB, "OnGetSetStyle");
             }
-            break;
+                break;
 
             case 0xFFFC:            //按键  -- 这是为了兼容之前的SDK，新版的SDK通过  OnKeyPress  返回
                 Integer ix = nStatus &0xFF;                //返回 模块按键
@@ -761,9 +819,16 @@ public class wifination {
     //下载文件回调 nError =1 表示有错误。
     private static void DownloadFile_callback(int nPercentage, String sFileName, int nError) {
         if (nError == 0) {
-            Log.e("downloading", "downloading  " + nPercentage + "%     " + sFileName);
+            ;
         }
-        jh_dowload_callback jh_dowload_callback = new jh_dowload_callback(nPercentage, sFileName, nError);
+        jh_dowload_callback jh_dowload_callback;
+        if(nError==0xFF)
+        {
+            jh_dowload_callback = new jh_dowload_callback(nPercentage, sFileName);
+        }
+        else {
+            jh_dowload_callback = new jh_dowload_callback(nPercentage, sFileName, nError);
+        }
         EventBus.getDefault().post(jh_dowload_callback, "DownloadFile");
     }
 
@@ -814,10 +879,10 @@ public class wifination {
 
     private  static  void offerEncoder(byte[] data,int nLen)
     {
-        if(videoMediaCoder!=null)
-        {
-            videoMediaCoder.offerEncoder(data,nLen);
-        }
+         if(videoMediaCoder!=null)
+         {
+             videoMediaCoder.offerEncoder(data,nLen);
+         }
     }
 
 

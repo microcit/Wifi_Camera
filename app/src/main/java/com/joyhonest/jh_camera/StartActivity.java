@@ -23,10 +23,14 @@ public class StartActivity extends AppCompatActivity {
      //   EventBus.getDefault().register(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wifination.naStop();
+    }
 
 
-
-//    @Subscriber(tag="Key_Pressed")
+    //    @Subscriber(tag="Key_Pressed")
 //    private  void key_Press(Integer nKeyA)
 //    {
 //        int nKye = nKeyA.intValue();
