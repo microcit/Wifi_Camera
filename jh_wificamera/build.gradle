@@ -50,15 +50,26 @@ publish {
     userOrg = 'aivenlau'//bintray.com用户名
     groupId = 'com.Joyhonest'//jcenter上的路径
     artifactId = 'Wifi_Camera'//项目名称
-    publishVersion = '3.4.3'//版本号 3.0.0 后支持 arm64
+    publishVersion = '3.6.0'//版本号 3.0.0 后支持 arm64
     desc = 'This is for JH WifiCamera'//描述，不重要
     website = 'https://github.com/aivenlau/Wifi_Camera'//网站，最好有，不重要
-
 
     // ./gradlew clean build bintrayUpload  -PbintrayUser=aivenlau  -PbintrayKey=18013f247275f1d35b7d591240c8594d99ef7a85  -PdryRun=false
 
 
     /*
+    3.6.0  修复 单独录像 到手机 或者SD卡引起闪退的问题
+    3.5.9  添加 获取缩略图 的SDK API(提供兼容性)
+    3.5.4   修改GP4225 获取文件列表流程
+    3.5.3
+    3.5.2  完善GP4225功能
+    3.5.1  bugs fixed
+    3.5.0  bug fixed（对于192.168.27.1 模快，无需要去指定 rtsp://192.168.27.1   ,SDK内部添加这个。
+    3.4.9  改进手势识别
+    3.4.8  将手势识别的 图片缩放用C实现，用来提高效率，以便在一些性能比较低的手机上运行。
+    3.4.6  修复一处内存泄露的问题。
+    3.4.5  bugfixed
+    3.4.4  bugs fixed
     3.4.3  bugs fixed
     3.4.2  添加GP4225 支持SD卡  192.168.33.x
     3.4.1  添加旋转 0 90 180，270  收到的数据。（注意，这里的旋转，是把直接把摄像头来的数据旋转，会改变实际图片的宽高

@@ -35,7 +35,7 @@ public class JH_GLSurfaceView extends GLSurfaceView {
 
     private void init(final Context context) {
         setEGLContextClientVersion(2);
-        setRenderer(new GLSurfaceView.Renderer() {
+        setRenderer(new Renderer() {
             @Override
             public void onSurfaceCreated(GL10 gl, EGLConfig config) {
                 wifination.init();

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Wifi_Camera.iml" filepath="$PROJECT_DIR$/.idea/Wifi_Camera.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jh_wificamera/Wifi_Camera-jh_wificamera.iml" filepath="$PROJECT_DIR$/jh_wificamera/Wifi_Camera-jh_wificamera.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/jh_wificamera/jh_wificamera.iml" filepath="$PROJECT_DIR$/jh_wificamera/jh_wificamera.iml" />
     </modules>
